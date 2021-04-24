@@ -93,10 +93,6 @@ def Fibonacci(f, a, b, eps):
     # Определим константу различимости между x1 и x2 (чтобы не было самопересечений)
     delta = eps 
 
-    # Будем нумеровать
-    # k = 1 
-    # while (b - a >= eps):
-    
     for k in range(1, n-1):
         iterations += 1                     # Увеличиваем счётчики
         f_calculations += 1
@@ -128,8 +124,7 @@ def Fibonacci(f, a, b, eps):
                 a = x1
             break
             
-        print(f"{iterations} итерация: отрезок [{a}, {b}]")
-        # print(a)
+        # print(f"{iterations} итерация: отрезок [{a}, {b}]")
     return (a+b)/2, iterations, f_calculations
 
 # ----------------------------------------------------------------------
@@ -140,7 +135,8 @@ def Parabolas(f, a, b, eps):
     f1 = f(a)
     f3 = f(b)
 
-    x = a + 0.5 * (b-a)                     # TODO проверка на (f2 < f1) and (f2 < f3)) в общем случае
+    x = 0
+    # x = a + 0.5 * (b-a)                     # TODO проверка на (f2 < f1) and (f2 < f3)) в общем случае
     f2 = f(x)
 
     u_prev = x
@@ -187,8 +183,7 @@ def Parabolas(f, a, b, eps):
                 f1 = fu
 
         u_prev = u
-        print(f"{iterations} итерация: [{a}, {x}, {b}]")
-
+        # print(f"{iterations} итерация: [{a}, {x}, {b}]")
     return u, iterations, f_calculations
 
 # ----------------------------------------------------------------------
@@ -270,4 +265,5 @@ def Brent(f, a, b, eps):
             elif (Fu <= Fv) or (v == x) or (v == w):
                 v = u
                 Fv = Fu
+        # print(f"{iterations} итерация: [{a}, {b}]")
     return (a+b)/2, iterations, f_calculations
