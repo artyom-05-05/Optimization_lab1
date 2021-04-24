@@ -35,27 +35,27 @@ def Golden_ratio(f, a, b, eps):
     iterations = 0              # кол-во итераций алгоритма 
     f_calculations = 2          # кол-во вычислений ф-ии
 
-    phi = (3 - sqrt(5)) / 2     # константа золотого сечения
+    phi = (sqrt(5) - 1) / 2     # константа золотого сечения
 
     # Нулевой этап
-    x1 = a + phi * (b - a)      # Точка золотого сечения отрезка [a, x2] 
-    x2 = b - phi * (b - a)      # Точка золотого сечения отрезка [x1, b]
+    x1 = b - phi * (b - a)      # Точка золотого сечения отрезка [x1, b] 
+    x2 = a + phi * (b - a)      # Точка золотого сечения отрезка [a, x2]
 
     F1 = f(x1)                  # Значения ф-ии в этих точках
     F2 = f(x2)  
 
     while (b - a >= eps): 
-        if (F1 > F2):           # Сравниваем F1 и F2 и отбрасываем одну из частей отрезка
+        if (F1 >= F2):           # Сравниваем F1 и F2 и отбрасываем одну из частей отрезка
             a = x1
             x1 = x2
-            x2 = b - (x1 - a)
+            x2 = a + phi * (b - a)
             F1 = F2
             F2 = f(x2)          # Считаем значение ф-ии в новой точке (только 1 раз за итерацию!!)
 
         else:
             b = x2
             x2 = x1
-            x1 = a + (b - x2)
+            x1 = b - phi * (b - a)
             F2 = F1
             F1 = f(x1)
 
@@ -70,12 +70,12 @@ def Golden_ratio(f, a, b, eps):
 
 # Метод Фибоначчи
 def Fibonacci(f, a, b, eps): 
-   
+
     iterations = 0                          # кол-во итераций алгоритма 
     f_calculations = 2                      # кол-во вычислений ф-ии
 
     # Вычисление n-го числа Фибоначчи
-    phi = (1 + sqrt(5)) / 2                 # константа золотого сечения
+    phi = (sqrt(5) + 1) / 2                 # константа золотого сечения
     Fib = lambda n: (phi ** n - (1 - phi) ** n) / (2 * phi -1)
 
     # Определение n (числа вычислений ф-ии)
@@ -87,16 +87,22 @@ def Fibonacci(f, a, b, eps):
     # Начальный этап
     x1 = a + Fib(n-2) / Fib(n) * (b - a)
     x2 = a + Fib(n-1) / Fib(n) * (b - a)
+    F1 = f(x1)                            
+    F2 = f(x2)
 
     # Определим константу различимости между x1 и x2 (чтобы не было самопересечений)
     delta = eps 
 
-    F1 = f(x1)                            
-    F2 = f(x2)
+    # Будем нумеровать
+    # k = 1 
+    # while (b - a >= eps):
+    
+    for k in range(1, n-1):
+        iterations += 1                     # Увеличиваем счётчики
+        f_calculations += 1
 
-    for k in range(1, (n-1) + 1):
         # Алгоритм без последнего шага
-        if (k != n-1):
+        if (k != n-2):
             if (F1 > F2):                   # Сравниваем F1 и F2 и отбрасываем одну из частей отрезка
                 a = x1
                 x1 = x2
@@ -112,18 +118,18 @@ def Fibonacci(f, a, b, eps):
                 F1 = f(x1)
         # Последний шаг
         else:
+            x1 = (a + b) / 2
             x2 = x1 + delta
+            F1 = f(x1)
             F2 = f(x2)
-            if (F1 == F2):
-                a = x1
-            elif (F1 < F2):
+            if (F1 <= F2):
                 b = x2
-
-        iterations += 1                     # Увеличиваем счётчики
-        f_calculations += 1
-
-        # print(f"{iterations} итерация: отрезок [{a}, {b}]")
-    
+            else:   
+                a = x1
+            break
+            
+        print(f"{iterations} итерация: отрезок [{a}, {b}]")
+        # print(a)
     return (a+b)/2, iterations, f_calculations
 
 # ----------------------------------------------------------------------
@@ -158,7 +164,7 @@ def Parabolas(f, a, b, eps):
         f_calculations += 1
 
         # Выход из цикла (завершение поиска MIN)
-        if abs(u - u_prev) <= eps:
+        if abs(u - u_prev) < eps:
             break
 
         if (u > x):                              
@@ -181,7 +187,7 @@ def Parabolas(f, a, b, eps):
                 f1 = fu
 
         u_prev = u
-        # print(f"{iterations} итерация: [{a}, {x}, {b}]")
+        print(f"{iterations} итерация: [{a}, {x}, {b}]")
 
     return u, iterations, f_calculations
 
